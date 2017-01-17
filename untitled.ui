@@ -42,7 +42,7 @@
     <string>Enable line number</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_2">
+  <widget class="QCheckBox" name="__checkBox_cursorline">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -55,7 +55,7 @@
     <string>Show current line</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_3">
+  <widget class="QCheckBox" name="checkBox_termguicolors">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -68,7 +68,7 @@
     <string>Enable true colors</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_4">
+  <widget class="QCheckBox" name="checkBox_visualbell">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -78,7 +78,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Enable true colors</string>
+    <string>Enable visualbell</string>
    </property>
   </widget>
   <widget class="QComboBox" name="comboBox">

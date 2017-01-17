@@ -5,6 +5,8 @@
 # Created by: PyQt5 UI code generator 5.7.1
 #
 # WARNING! All changes made in this file will be lost!
+# :runtime optwin.vim
+# list of options available in src/nvim/options.lua
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sys
@@ -30,7 +32,6 @@ log.addHandler(logging.FileHandler(os.path.join(os.getenv("HOME", ""), "nvimconf
 #     returns success, filename
 #     """
 #     candidates = [
-#         os.path.join(os.environ['XDG_CONFIG_HOME'], 'nvim', 'init.vim')
 #     ]
 #     for c in candidates:
 #         if os.path.isfile(c):
@@ -38,7 +39,8 @@ log.addHandler(logging.FileHandler(os.path.join(os.getenv("HOME", ""), "nvimconf
 
 #     return False,
 
-
+prefix = 'checkBox_'
+saveto = 'init.generated.vim'
 
 
 class ConfigViewer(Ui_Dialog):
@@ -65,8 +67,11 @@ class ConfigViewer(Ui_Dialog):
         # can get it from running instance with
         # echo v:servername
 
-        path_to_socket="/tmp/nvimd4Na8G/0"
-        self.nvim = neovim.attach('socket', path=path_to_socket)
+        # path_to_socket="/tmp/nvimd4Na8G/0"
+        # self.nvim = neovim.attach('socket', path=path_to_socket)
+        self.nvim = neovim.attach('child', argv=["/usr/bin/env", "nvim", "--embed"])
+
+    # def __destroy__
 
     def nvim_cmd(self, cmd):
         """
@@ -88,11 +93,45 @@ class ConfigViewer(Ui_Dialog):
     # def main(self):
     #     self.show()
 
+    def getconfigfilename(self):
+        """
+        """
+#         os.path.join(os.environ['XDG_CONFIG_HOME'], 'nvim', 'init.vim')
+        return self.nvim.command_output('echo $MYVIMRC').strip('\n')
+
+    def get_bool_options(self):
+
+        opts = []
+        for m in inspect.getmembers(self, lambda a:not(inspect.isroutine(a))):
+            # print("variable", m)
+            if m[0].startswith(prefix):
+                opts.append(m[0][len(prefix):])
+        return opts
+
     def loadconfig(self, filename):
         """
-        use nvim_get_option ?
+        use nvim_(win)get_option ?
 
         """
+        opts = self.get_bool_options() # self.nvim.options
+        # checkboxers can be tristate
+        # print("STATUSLINE=", self.nvim.options['statusline'])
+        # print("VISUALBELL=", self.nvim.options['visualbell'])
+        for optname in opts:
+    # can't work the way nvim is designed
+        # for name, opt in opts.items():
+
+            print("opt %s=%s" % (optname, self.nvim.options[optname]))
+            widget = getattr(self, prefix + optname) # , self.nvim.options[optname])
+            widget.setChecked(self.nvim.options[optname])
+
+# vim.current.window.options['colorcolumn'] = '4,3'
+        # print("VISUALBELL %r" % opts)
+        # ("nvim_get_option")
+        # self.nvim.command()
+        # print("RESULT=", self.nvim.command_output('echo $MYVIMRC'))
+                # vars['MYVIMRC'])
+        # self.nvim.
         # TODO dir(self)
         # for var in ['check']:
         #     if var.__name__.startswith('checkbox_'):
@@ -102,17 +141,43 @@ class ConfigViewer(Ui_Dialog):
         #     lines = fd.readlines()
 
     def saveconfig(self, filename):
+        """
+        1. Writes into init.generated.vim 
+        2. Checks that init.vim 
+        """
         # save our own version
-        with open(filename, "w+") as fd:
+        # saveto
+        config = self.getconfigfilename()
+        config_dir = os.path.dirname(config)
+        generated_cfg_fname = os.path.join(config_dir, saveto)
+        log.info("Saving config into %s" % (generated_cfg_fname))
+        with open(generated_cfg_fname, "w+") as fd:
             # TODO use inspect
             # for all booleans
             # write set (no)option
-            for m in inspect.getmembers(self, lambda a:not(inspect.isroutine(a))):
+            for m in inspect.getmembers(self, lambda a: not(inspect.isroutine(a))):
                 print("variable", m)
-                if(m[0].startswith('checkBox'))
-                
-            # fd.write()
+                if m[0].startswith('checkBox'):
+                    # print("boolean")
+                    print("name=", m[0][len(prefix):])
+                    fd.write("set %s%s\n" % ("" if m[1].isChecked() else "no", m[0][len(prefix):]))
 
+        import re
+
+        addition = "runtime init.generated.vim"
+        textfile = open(config, 'r')
+        matches = []
+        reg = re.compile("%s" % addition)
+        text = textfile.read()
+        textfile.close()
+        # print(text)
+        matches = reg.findall(text)
+        print("matches=", matches)
+        if len(matches) == 0:
+            textfile = open(config, 'a+')
+            textfile.write(addition + "\n")
+
+        print ("SAVED")
         # then append all that is after
 
 if __name__ == '__main__':
@@ -122,8 +187,10 @@ if __name__ == '__main__':
     t = ConfigViewer(dialog)
 
     t.loadconfig("fake")
-    t.saveconfig("fake")
     # imageViewer.main()
     dialog.show()
-
-    sys.exit(app.exec_())
+    ret = app.exec_()
+    print(ret)
+    # TODO act differently upon OK/Cancel
+    t.saveconfig("fake")
+    sys.exit(ret)
