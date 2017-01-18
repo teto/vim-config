@@ -29,32 +29,6 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QCheckBox" name="number">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>20</y>
-     <width>121</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Enable line number</string>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="__checkBox_cursorline">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>40</y>
-     <width>141</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Show current line</string>
-   </property>
-  </widget>
   <widget class="QCheckBox" name="checkBox_termguicolors">
    <property name="geometry">
     <rect>
@@ -80,31 +54,6 @@
    <property name="text">
     <string>Enable visualbell</string>
    </property>
-  </widget>
-  <widget class="QComboBox" name="comboBox">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>120</y>
-     <width>79</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>No inccommand</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Show subtitution in a split</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>Not in a split</string>
-    </property>
-   </item>
   </widget>
  </widget>
  <resources/>

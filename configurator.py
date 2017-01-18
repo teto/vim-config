@@ -50,28 +50,16 @@ class ConfigViewer(Ui_Dialog):
         Ui_Dialog.__init__(self)
         self.setupUi(dialog)
 
-        # self.bools = {
-        #     'number':
-        #     'termguicolors':
-        # }
-
         # Connect up the buttons.
-        self.number.clicked.connect(self.setnumber)
+        # self.number.clicked.connect(self.setnumber)
         # self.okButton.clicked.connect(self.accept)
         # self.cancelButton.clicked.connect(self.reject)
 
         # path=os.environ["NVIM_LISTEN_ADDRESS"]
         # https://github.com/neovim/python-client/issues/124
         # launch a headless nvim .
-        # TODO lancer une instance de nvim en specifiant socket ?
-        # can get it from running instance with
-        # echo v:servername
-
-        # path_to_socket="/tmp/nvimd4Na8G/0"
-        # self.nvim = neovim.attach('socket', path=path_to_socket)
         self.nvim = neovim.attach('child', argv=["/usr/bin/env", "nvim", "--embed"])
 
-    # def __destroy__
 
     def nvim_cmd(self, cmd):
         """
@@ -80,18 +68,11 @@ class ConfigViewer(Ui_Dialog):
         try:
             log.debug("nvim attached")
             self.nvim.command('let oldwin = winnr()') 
-            # nvim.command('wincmd ' + direction)
-            # res = nvim.eval('oldwin != winnr()')
-            # log.debug("Result of command %d" % res)
             return res
         except Exception as e:
                 log.error("Exception %s" % e)
                 return False
 
-    def setnumber(self, val):
-        print("value", val)
-    # def main(self):
-    #     self.show()
 
     def getconfigfilename(self):
         """
@@ -100,7 +81,6 @@ class ConfigViewer(Ui_Dialog):
         return self.nvim.command_output('echo $MYVIMRC').strip('\n')
 
     def get_bool_options(self):
-
         opts = []
         for m in inspect.getmembers(self, lambda a:not(inspect.isroutine(a))):
             # print("variable", m)
@@ -111,7 +91,6 @@ class ConfigViewer(Ui_Dialog):
     def loadconfig(self, filename):
         """
         use nvim_(win)get_option ?
-
         """
         opts = self.get_bool_options() # self.nvim.options
         # checkboxers can be tristate
@@ -170,7 +149,6 @@ class ConfigViewer(Ui_Dialog):
         reg = re.compile("%s" % addition)
         text = textfile.read()
         textfile.close()
-        # print(text)
         matches = reg.findall(text)
         print("matches=", matches)
         if len(matches) == 0:
