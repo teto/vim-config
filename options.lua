@@ -17,8 +17,8 @@
 -- types: bool, number, string
 -- lists: (nil), comma, onecomma, flags, flagscomma
 -- scopes: global, buffer, window
--- redraw options: statuslines, current_window, current_buffer, all_windows, 
---                 everything, curswant
+-- redraw options: statuslines, current_window, curent_window_only,
+--                 current_buffer, all_windows, everything, curswant
 -- default: {vi=…[, vim=…]}
 -- defaults: {condition=#if condition, if_true=default, if_false=default}
 -- #if condition:
@@ -39,11 +39,17 @@ local N_=function(s)
     return 'N_(' .. cstr(s) .. ')'
   end
 end
+
+local function tr(s)
+	return s
+end
+
 return {
   cstr=cstr,
   options={
     {
       full_name='aleph', abbreviation='al',
+      short_desc=tr('the ASCII code for the first letter of the Hebrew alphabet'),
       type='number', scope={'global'},
       vi_def=true,
       redraw={'curswant'},
@@ -52,6 +58,7 @@ return {
     },
     {
       full_name='arabic', abbreviation='arab',
+      short_desc=tr('prepare for editing Arabic text'),
       type='bool', scope={'window'},
       vi_def=true,
       vim=true,
@@ -60,6 +67,7 @@ return {
     },
     {
       full_name='arabicshape', abbreviation='arshape',
+      short_desc=tr('perform shaping of Arabic characters'),
       type='bool', scope={'global'},
       vi_def=true,
       vim=true,
@@ -69,6 +77,7 @@ return {
     },
     {
       full_name='allowrevins', abbreviation='ari',
+      short_desc=tr('allow CTRL-_ in Insert and Command-line mode to toggle \'revins\''),
       type='bool', scope={'global'},
       vi_def=true,
       vim=true,
@@ -77,6 +86,7 @@ return {
     },
     {
       full_name='altkeymap', abbreviation='akm',
+      short_desc=tr('use Farsi as the second language when \'revins\' is set'),
       type='bool', scope={'global'},
       vi_def=true,
       varname='p_altkeymap',
@@ -84,6 +94,7 @@ return {
     },
     {
       full_name='ambiwidth', abbreviation='ambw',
+      short_desc=tr(''),
       type='string', scope={'global'},
       vi_def=true,
       redraw={'everything'},
@@ -92,6 +103,7 @@ return {
     },
     {
       full_name='autochdir', abbreviation='acd',
+      short_desc=tr(''),
       type='bool', scope={'global'},
       vi_def=true,
       varname='p_acd',
@@ -99,18 +111,21 @@ return {
     },
     {
       full_name='autoindent', abbreviation='ai',
+      short_desc=tr(''),
       type='bool', scope={'buffer'},
       varname='p_ai',
       defaults={if_true={vi=false, vim=true}}
     },
     {
       full_name='autoread', abbreviation='ar',
+      short_desc=tr(''),
       type='bool', scope={'global', 'buffer'},
       varname='p_ar',
       defaults={if_true={vi=false, vim=true}}
     },
     {
       full_name='autowrite', abbreviation='aw',
+      short_desc=tr(''),
       type='bool', scope={'global'},
       vi_def=true,
       varname='p_aw',
@@ -118,6 +133,7 @@ return {
     },
     {
       full_name='autowriteall', abbreviation='awa',
+      short_desc=tr(''),
       type='bool', scope={'global'},
       vi_def=true,
       varname='p_awa',
@@ -125,6 +141,7 @@ return {
     },
     {
       full_name='background', abbreviation='bg',
+      short_desc=tr(''),
       type='string', scope={'global'},
       vi_def=true,
       redraw={'everything'},
@@ -133,6 +150,7 @@ return {
     },
     {
       full_name='backspace', abbreviation='bs',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'global'},
       deny_duplicates=true,
       vim=true,
@@ -141,6 +159,7 @@ return {
     },
     {
       full_name='backup', abbreviation='bk',
+      short_desc=tr(''),
       type='bool', scope={'global'},
       vi_def=true,
       vim=true,
@@ -149,6 +168,7 @@ return {
     },
     {
       full_name='backupcopy', abbreviation='bkc',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'global', 'buffer'},
       deny_duplicates=true,
       vim=true,
@@ -161,6 +181,7 @@ return {
     },
     {
       full_name='backupdir', abbreviation='bdir',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'global'},
       deny_duplicates=true,
       secure=true,
@@ -171,6 +192,7 @@ return {
     },
     {
       full_name='backupext', abbreviation='bex',
+      short_desc=tr(''),
       type='string', scope={'global'},
       normal_fname_chars=true,
       vi_def=true,
@@ -179,6 +201,7 @@ return {
     },
     {
       full_name='backupskip', abbreviation='bsk',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'global'},
       vi_def=true,
       varname='p_bsk',
@@ -186,6 +209,7 @@ return {
     },
     {
       full_name='belloff', abbreviation='bo',
+      short_desc=tr(''),
       deny_duplicates=true,
       type='string', list='comma', scope={'global'},
       vi_def=true,
@@ -194,6 +218,7 @@ return {
     },
     {
       full_name='binary', abbreviation='bin',
+      short_desc=tr(''),
       type='bool', scope={'buffer'},
       vi_def=true,
       redraw={'statuslines'},
@@ -202,6 +227,7 @@ return {
     },
     {
       full_name='bomb',
+      short_desc=tr(''),
       type='bool', scope={'buffer'},
       no_mkrc=true,
       vi_def=true,
@@ -211,6 +237,7 @@ return {
     },
     {
       full_name='breakat', abbreviation='brk',
+      short_desc=tr(''),
       type='string', list='flags', scope={'global'},
       vi_def=true,
       redraw={'all_windows'},
@@ -219,6 +246,7 @@ return {
     },
     {
       full_name='breakindent', abbreviation='bri',
+      short_desc=tr(''),
       type='bool', scope={'window'},
       vi_def=true,
       vim=true,
@@ -227,6 +255,7 @@ return {
     },
     {
       full_name='breakindentopt', abbreviation='briopt',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'window'},
       deny_duplicates=true,
       vi_def=true,
@@ -236,12 +265,14 @@ return {
     },
     {
       full_name='browsedir', abbreviation='bsdir',
+      short_desc=tr(''),
       type='string', scope={'global'},
       vi_def=true,
       enable_if=false,
     },
     {
       full_name='bufhidden', abbreviation='bh',
+      short_desc=tr(''),
       type='string', scope={'buffer'},
       noglob=true,
       vi_def=true,
@@ -251,6 +282,7 @@ return {
     },
     {
       full_name='buflisted', abbreviation='bl',
+      short_desc=tr(''),
       type='bool', scope={'buffer'},
       noglob=true,
       vi_def=true,
@@ -259,6 +291,7 @@ return {
     },
     {
       full_name='buftype', abbreviation='bt',
+      short_desc=tr(''),
       type='string', scope={'buffer'},
       noglob=true,
       vi_def=true,
@@ -268,6 +301,7 @@ return {
     },
     {
       full_name='casemap', abbreviation='cmp',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'global'},
       deny_duplicates=true,
       vi_def=true,
@@ -276,6 +310,7 @@ return {
     },
     {
       full_name='cdpath', abbreviation='cd',
+      short_desc=tr(''),
       type='string', list='comma', scope={'global'},
       deny_duplicates=true,
       vi_def=true,
@@ -285,12 +320,14 @@ return {
     },
     {
       full_name='cedit',
+      short_desc=tr(''),
       type='string', scope={'global'},
       varname='p_cedit',
       defaults={if_true={vi="", vim=macros('CTRL_F_STR')}}
     },
     {
       full_name='charconvert', abbreviation='ccv',
+      short_desc=tr(''),
       type='string', scope={'global'},
       secure=true,
       vi_def=true,
@@ -299,6 +336,7 @@ return {
     },
     {
       full_name='cindent', abbreviation='cin',
+      short_desc=tr(''),
       type='bool', scope={'buffer'},
       vi_def=true,
       vim=true,
@@ -307,6 +345,7 @@ return {
     },
     {
       full_name='cinkeys', abbreviation='cink',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'buffer'},
       deny_duplicates=true,
       vi_def=true,
@@ -316,6 +355,7 @@ return {
     },
     {
       full_name='cinoptions', abbreviation='cino',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'buffer'},
       deny_duplicates=true,
       vi_def=true,
@@ -325,6 +365,7 @@ return {
     },
     {
       full_name='cinwords', abbreviation='cinw',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'buffer'},
       deny_duplicates=true,
       vi_def=true,
@@ -334,6 +375,7 @@ return {
     },
     {
       full_name='clipboard', abbreviation='cb',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'global'},
       deny_duplicates=true,
       vi_def=true,
@@ -342,6 +384,7 @@ return {
     },
     {
       full_name='cmdheight', abbreviation='ch',
+      short_desc=tr(''),
       type='number', scope={'global'},
       vi_def=true,
       redraw={'all_windows'},
@@ -350,6 +393,7 @@ return {
     },
     {
       full_name='cmdwinheight', abbreviation='cwh',
+      short_desc=tr(''),
       type='number', scope={'global'},
       vi_def=true,
       varname='p_cwh',
@@ -357,6 +401,7 @@ return {
     },
     {
       full_name='colorcolumn', abbreviation='cc',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'window'},
       deny_duplicates=true,
       vi_def=true,
@@ -365,6 +410,7 @@ return {
     },
     {
       full_name='columns', abbreviation='co',
+      short_desc=tr(''),
       type='number', scope={'global'},
       no_mkrc=true,
       nodefault=true,
@@ -375,6 +421,7 @@ return {
     },
     {
       full_name='comments', abbreviation='com',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'buffer'},
       deny_duplicates=true,
       vi_def=true,
@@ -385,6 +432,7 @@ return {
     },
     {
       full_name='commentstring', abbreviation='cms',
+      short_desc=tr(''),
       type='string', scope={'buffer'},
       vi_def=true,
       alloced=true,
@@ -394,6 +442,7 @@ return {
     },
     {
       full_name='compatible', abbreviation='cp',
+      short_desc=tr(''),
       type='bool', scope={'global'},
       redraw={'all_windows'},
       varname='p_force_off',
@@ -403,6 +452,7 @@ return {
     },
     {
       full_name='complete', abbreviation='cpt',
+      short_desc=tr(''),
       type='string', list='onecomma', scope={'buffer'},
       deny_duplicates=true,
       alloced=true,
@@ -411,6 +461,7 @@ return {
     },
     {
       full_name='concealcursor', abbreviation='cocu',
+      short_desc=tr(''),
       type='string', scope={'window'},
       vi_def=true,
       alloced=true,
@@ -419,6 +470,7 @@ return {
     },
     {
       full_name='conceallevel', abbreviation='cole',
+      short_desc=tr(''),
       type='number', scope={'window'},
       vi_def=true,
       redraw={'current_window'},
@@ -426,6 +478,7 @@ return {
     },
     {
       full_name='completefunc', abbreviation='cfu',
+      short_desc=tr(''),
       type='string', scope={'buffer'},
       secure=true,
       vi_def=true,
@@ -458,6 +511,7 @@ return {
     },
     {
       full_name='cpoptions', abbreviation='cpo',
+      short_desc=tr('list of flags to specify Vi compatibility'),
       type='string', list='flags', scope={'global'},
       vim=true,
       redraw={'all_windows'},
@@ -539,7 +593,7 @@ return {
       full_name='cursorline', abbreviation='cul',
       type='bool', scope={'window'},
       vi_def=true,
-      redraw={'current_window'},
+      redraw={'current_window_only'},
       defaults={if_true={vi=false}}
     },
     {
@@ -1576,6 +1630,7 @@ return {
     },
     {
       full_name='mousefocus', abbreviation='mousef',
+      short_desc=tr('the window with the mouse pointer becomes the current one'),
       type='bool', scope={'global'},
       vi_def=true,
       enable_if=false,

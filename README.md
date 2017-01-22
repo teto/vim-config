@@ -13,7 +13,14 @@ Hence you can use this program along with the terminal UI, neovim-Qt, VimR or an
 ![screenshot](./screenshot.png)
 
 # Dependancies
-`python3 -mpip install --user -U neovim pyqt5`
+`python3 -mpip install --user -U neovim pyqt5 `
+`python -mpip install --user -U paragrep`
+ 
+# ROADMAP
+
+- Get tooltip from parsing help
+- Get oneliner from parsing runtime/optwin.vim (or modify screen.lua
+		accordingly)
 
 # Contribute
 

@@ -128,8 +128,9 @@ class ConfigViewer(Ui_Dialog):
             # For now just setup booleans
             booldf = df[df.type == "bool"]
             for c, option in enumerate(booldf.itertuples()):
+                optname = option.full_name
                 try:
-                    optvalue = self.get_option_value(scope, option.full_name)
+                    optvalue = self.get_option_value(scope, optname)
                 except neovim.api.nvim.NvimError as e:
                     log.warning(e)
                     continue 
@@ -138,12 +139,20 @@ class ConfigViewer(Ui_Dialog):
                 newCheckbox.setObjectName(option.full_name)
 
                 # TODO where to get a short description ?
-                newCheckbox.setText(_translate("Dialog", option.full_name))
-                print("adding %s" % option.full_name)
+                # from runtime/options.vim
+                desc = optname
+                print("adding %s (%s)" % (option.full_name, option.short_desc))
+                if isinstance(option.short_desc, str) and len(option.short_desc) > 0:
+                    desc = option.short_desc
+                newCheckbox.setText(_translate("Dialog", 
+                    desc))
+                # print("adding %s " % option.short_desc)
                 newCheckbox.setChecked(optvalue)
 
                 # TODO retrieve from help
-                newCheckbox.setToolTip(_translate("Dialog", "hello world"))
+                # I can run : 'option', go to the end of paragraph and capture 
+                # text between both
+                newCheckbox.setToolTip(_translate("Dialog", "TODO parse help"))
         # checkboxers can be tristate
         # print("STATUSLINE=", self.nvim.options['statusline'])
         # print("VISUALBELL=", self.nvim.options['visualbell'])

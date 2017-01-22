@@ -13,7 +13,7 @@ end
 
 -- _G[varname]
 --
-fields = { "full_name", "type", "scope"}
+fields = { "full_name", "type", "short_desc", "scope"}
 -- print(toCSV(options.options))
 header = ""
 
@@ -32,7 +32,7 @@ function toCSV (tt)
 -- ChM 23.02.2014: changed pairs to ipairs 
 -- assumption is that fromCSV and toCSV maintain data as ordered array
   for _,p in ipairs(tt) do  
-    s = s .. "," .. escapeCSV(p)
+	s = s .. "," .. escapeCSV(p)
   end
   return string.sub(s, 2)      -- remove first comma
 end
@@ -55,7 +55,7 @@ function dumpTable(opt)
 			-- print("SCOPE")
 			append = toCSV(opt[name])
 		else
-			append = opt[name]
+			append = opt[name] or ""
 		end
 		-- print(opt[name])
 		line = line..","..append
