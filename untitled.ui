@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>240</y>
+     <y>260</y>
      <width>341</width>
      <height>32</height>
     </rect>
@@ -29,31 +29,113 @@
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
   </widget>
-  <widget class="QCheckBox" name="checkBox_termguicolors">
+  <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>60</y>
-     <width>141</width>
-     <height>20</height>
+     <x>10</x>
+     <y>10</y>
+     <width>371</width>
+     <height>251</height>
     </rect>
    </property>
-   <property name="text">
-    <string>Enable true colors</string>
+   <property name="currentIndex">
+    <number>0</number>
    </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBox_visualbell">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>80</y>
-     <width>141</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Enable visualbell</string>
-   </property>
+   <widget class="QWidget" name="plug">
+    <attribute name="title">
+     <string>Plugins</string>
+    </attribute>
+    <widget class="QCheckBox" name="checkBox_termguicolors">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>120</y>
+       <width>141</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Enable true colors</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_visualbell">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>90</y>
+       <width>141</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>hello world</string>
+     </property>
+     <property name="text">
+      <string>Enable visualbell</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>160</y>
+       <width>121</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Upgrade vim-plug</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>190</y>
+       <width>121</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Upgrade plugins</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>30</y>
+       <width>141</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>No completion</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>YouCompleteMe completion</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Rtags completion</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Deoplete Completion</string>
+      </property>
+     </item>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>Tab 2</string>
+    </attribute>
+   </widget>
   </widget>
  </widget>
  <resources/>
