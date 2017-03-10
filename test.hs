@@ -15,7 +15,7 @@ import qualified Data.Vector as V
 -- bytestring
 -- import Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Lazy as ByteString
--- import qualified Data.ByteString.Lazy.UTF8 as UTF8
+import qualified Data.ByteString.Lazy.UTF8 as UTF8
 -- data Person = Person
 --     { name   :: !String
 --     , salary :: !Int
@@ -162,35 +162,53 @@ opts = info (sample <**> helper)
   -- | null lines  = []
   -- | otherwise = head lines ++ addToOptions (tail lines) record
 
+genShortDesc :: OptionRecord -> String
+genShortDesc record = "short_desc=" ++ desc record
+
+-- todo use concatMap
+--name record `isInfixOf` head lines = 
+insertSpecificDesc :: OptionRecord -> [String] -> [String]
+insertSpecificDesc record lines = concatMap (\ line -> if name record `isInfixOf` line then [line, genShortDesc record] else [line]) lines
+
+-- to be useed with traverse
+insertAllDesc :: V.Vector OptionRecord -> [String] -> [String]
+insertAllDesc options lines
+  | null options = []
+  | otherwise = insertSpecificDesc (V.head options) lines 
+  -- : insertAllDesc (tail options) lines
 
 decode :: String -> IO ()
 decode from = do
     csvData <- ByteString.readFile from
 
-    -- fd <- Prelude.readFile filename
-    -- let l = UTF8.lines csvData
+    fd <- readFile "options.lua"
+    let l = lines fd
     -- let towrite = lines
+    -- forM_ :: (Foldable t, Monad m) => t a -> (a -> m b) -> m ()
+    -- backslash => lambda
+    -- for each record
+    putStrLn "hello"
     case Cassava.decodeByName csvData of
         Left err -> putStrLn err
-        -- forM_ :: (Foldable t, Monad m) => t a -> (a -> m b) -> m ()
-        -- backslash => lambda
-        -- for each record
-        Right (_, v) ->
-          -- TODO complete 
-  -- concatMap or traverse or mapM
-          -- Data.Foldable forM_ :: (Foldable t, Monad m) => t a -> (a -> m b) -> m ()
-          print v
-           -- V.forM_ v $ \ p ->
-           --    --
-           --    -- putStrLn $ name p ++ show (desc p)
-           --    let towrite = addToOptions towrite p
+        Right (_, v) -> putStrLn $ unlines full where full = insertAllDesc v l
+        -- Right (_, v) -> let full = insertAllDesc v l; putStrLn full
 
-          -- out <- Prelude.writeFile "options2.lua"
+-- return ()
+-- concatMap or traverse or mapM
+-- traverse (Traversable t, Applicative f) => (a -> f b) -> t a -> f (t b)
+-- Data.Foldable forM_ :: (Foldable t, Monad m) => t a -> (a -> m b) -> m ()
+-- print v
+-- V.forM_ v $ \ p ->
+--    --
+--    -- putStrLn $ name p ++ show (desc p)
+--    let towrite = addToOptions towrite p
 
+-- out <- Prelude.writeFile "options2.lua"
 
 -- TODO add sthg like
 -- http://hackage.haskell.org/package/optparse-applicative
-main :: IO ()
+
+-- main :: IO
 main = do
     -- a priori options is of type Sample
     options <- execParser opts
@@ -199,3 +217,4 @@ main = do
       "encode" -> encode "quickref.txt" "out.csv"
       "decode" -> decode "out.csv"
     -- case args
+    putStrLn "End of the program"
