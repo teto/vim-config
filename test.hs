@@ -6,6 +6,7 @@ import qualified Data.Semigroup  as SG
 
 import System.IO
 import Data.Maybe (catMaybes)
+import Data.List (isInfixOf)
 -- import Options.Applicative
 -- import Data.Semigroup ((<>))
 -- import Control.Applicative
@@ -14,6 +15,7 @@ import qualified Data.Vector as V
 -- bytestring
 -- import Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Lazy as ByteString
+-- import qualified Data.ByteString.Lazy.UTF8 as UTF8
 -- data Person = Person
 --     { name   :: !String
 --     , salary :: !Int
@@ -29,9 +31,11 @@ import qualified Data.Csv as Cassava
 import qualified Data.Vector as Vector
 
 
+-- deriving implements automatically the obvious functions (show for Show , Eq for Eq etc)
 data OptionRecord = OptionRecord { name :: !String, abbr :: !String, desc :: !String } deriving (Eq, Show)
 
-instance  Cassava.FromNamedRecord OptionRecord where
+-- To declare an instance of FromNamedRecord, we need to implement the parseNamedRecord function, which takes a map of names to fields and returns a parser of Item. The (.:) operator is a lookup operator, so m .: "Item" means that we look up a field with name Item in the map m. If there's such a field in the map, we use it as the first argument of the Item constructor, that is, we assign it to the itemName field
+instance Cassava.FromNamedRecord OptionRecord where
     -- (<*>) :: Applicative f => f (a -> b) -> f a -> f b
     -- .: is an accessor
     -- https://www.stackbuilders.com/tutorials/haskell/csv-encoding-decoding/
@@ -46,8 +50,8 @@ instance Cassava.ToNamedRecord OptionRecord where
       , "desc" Cassava..= desc
       ]
 
-csvHeader :: Cassava.Header
-csvHeader = Vector.fromList [ "name", "abbr", "desc"]
+optionsHeader :: Cassava.Header
+optionsHeader = Vector.fromList [ "name", "abbr", "desc"]
 -- instance ToField OptionRecord where
 --   toField Country = "International Country"
 --   toField (Other otherType) = toField otherType
@@ -108,11 +112,14 @@ encode from out = do
   let records = map parseLine relevantLines
   -- filter out nothing values
   -- http://stackoverflow.com/questions/40327699/filtering-nothing-and-unpack-just
-  let cleanRecords = catMaybes records
+  let cleanRecords = reverse $ catMaybes records
   -- let records = Just ( OptionRecord "name" "abbr" "desc" ++  records
-  outh <- openFile "out.csv" WriteMode
   -- do
-  saveRecords outh cleanRecords
+  let result = Cassava.encodeByName optionsHeader cleanRecords
+  ByteString.writeFile out result
+  -- outh <- openFile "out.csv" WriteMode
+  -- hPutStrLn outh result
+  -- saveRecords outh cleanRecords
   -- print records
   print "hello world"
   -- print $ "start=" ++ unlines start
@@ -146,16 +153,39 @@ opts = info (sample <**> helper)
   <> header "update options.lua" )
 
 
+
+-- generate a new file
+-- addToOptions :: [String] -> OptionRecord -> [String]
+-- addToOptions lines record
+  -- todo append to another file
+  -- |  name record `isInfixOf` head lines = head lines ++ "short_desc=" ++ (desc record)  ++ lines
+  -- | null lines  = []
+  -- | otherwise = head lines ++ addToOptions (tail lines) record
+
+
 decode :: String -> IO ()
-decode from = do 
+decode from = do
     csvData <- ByteString.readFile from
+
+    -- fd <- Prelude.readFile filename
+    -- let l = UTF8.lines csvData
+    -- let towrite = lines
     case Cassava.decodeByName csvData of
         Left err -> putStrLn err
         -- forM_ :: (Foldable t, Monad m) => t a -> (a -> m b) -> m ()
         -- backslash => lambda
-        Right (_, v) -> V.forM_ v $ \ p ->
-            putStrLn $ name p ++ " earns " ++ show (desc p) ++ " dollars"
+        -- for each record
+        Right (_, v) ->
+          -- TODO complete 
+  -- concatMap or traverse or mapM
+          -- Data.Foldable forM_ :: (Foldable t, Monad m) => t a -> (a -> m b) -> m ()
+          print v
+           -- V.forM_ v $ \ p ->
+           --    --
+           --    -- putStrLn $ name p ++ show (desc p)
+           --    let towrite = addToOptions towrite p
 
+          -- out <- Prelude.writeFile "options2.lua"
 
 
 -- TODO add sthg like
