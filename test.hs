@@ -196,8 +196,8 @@ decode from = do
     putStrLn "hello"
     case Cassava.decodeByName csvData of
         Left err -> putStrLn err
-        Right (_, v) -> putStrLn $ unlines full
-          --
+        Right (_, v) -> Prelude.writeFile "options2.lua" (unlines full)
+          -- todo save results
           -- (\ line v -> if name record `isInfixOf` line then [line, genShortDesc record] else [line])
           where full = concatMap (insertAllDesc v) l
         -- Right (_, v) -> let full = insertAllDesc v l; putStrLn full
