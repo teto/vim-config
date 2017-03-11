@@ -21,7 +21,7 @@ import qualified Data.ByteString.Lazy.UTF8 as UTF8
 --     , salary :: !Int
 --     }
 import qualified Data.Csv as Cassava
-
+-- import Network.URI (escapeURIString)
 -- text
 -- import Data.Text (Text)
 -- import qualified Data.Text.Encoding as Text
@@ -162,10 +162,11 @@ opts = info (sample <**> helper)
   -- | null lines  = []
   -- | otherwise = head lines ++ addToOptions (tail lines) record
 
+-- TODO encodeField escapeURIString
 genShortDesc :: OptionRecord -> String
-genShortDesc record = "      short_desc='" ++ desc record ++ "',"
--- todo use encode ?!
-
+genShortDesc record = "      short_desc=" ++ show (desc record) ++ ","
+-- todo use encode ?!escapeURIString
+-- escapeURIString (== '"')
 -- -- todo use concatMap
 -- --name record `isInfixOf` head lines = 
 -- insertSpecificDesc :: OptionRecord -> String -> [String]

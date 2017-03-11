@@ -44,7 +44,6 @@ return {
   options={
     {
       full_name='aleph', abbreviation='al',
-      short_desc=_("hello"),
       type='number', scope={'global'},
       vi_def=true,
       redraw={'curswant'},
