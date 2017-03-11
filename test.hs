@@ -163,19 +163,25 @@ opts = info (sample <**> helper)
   -- | otherwise = head lines ++ addToOptions (tail lines) record
 
 genShortDesc :: OptionRecord -> String
-genShortDesc record = "short_desc=" ++ desc record
+genShortDesc record = "      short_desc='" ++ desc record ++ "',"
+-- todo use encode ?!
 
--- todo use concatMap
---name record `isInfixOf` head lines = 
-insertSpecificDesc :: OptionRecord -> [String] -> [String]
-insertSpecificDesc record lines = concatMap (\ line -> if name record `isInfixOf` line then [line, genShortDesc record] else [line]) lines
+-- -- todo use concatMap
+-- --name record `isInfixOf` head lines = 
+-- insertSpecificDesc :: OptionRecord -> String -> [String]
+-- insertSpecificDesc record line
+--     -- concatMap (\ line -> if name record `isInfixOf` line then [line, genShortDesc record] else [line]) lines
+--     | (ame record ++ "'") `isInfixOf` line = [line, genShortDesc record]
+--     | otherwise = []
 
 -- to be useed with traverse
-insertAllDesc :: V.Vector OptionRecord -> [String] -> [String]
-insertAllDesc options lines
-  | null options = []
-  | otherwise = insertSpecificDesc (V.head options) lines 
-  -- : insertAllDesc (tail options) lines
+insertAllDesc :: V.Vector OptionRecord -> String -> [String]
+insertAllDesc options line
+  -- concatMap (\ line -> if name record `isInfixOf` line then [line, genShortDesc record] else [line]) lines
+  | null options = [line]
+  | ("full_name='" ++ name record) `isInfixOf` line = [line, genShortDesc record]
+  | otherwise = insertAllDesc (V.tail options) line
+  where record = V.head options
 
 decode :: String -> IO ()
 decode from = do
@@ -190,7 +196,10 @@ decode from = do
     putStrLn "hello"
     case Cassava.decodeByName csvData of
         Left err -> putStrLn err
-        Right (_, v) -> putStrLn $ unlines full where full = insertAllDesc v l
+        Right (_, v) -> putStrLn $ unlines full
+          --
+          -- (\ line v -> if name record `isInfixOf` line then [line, genShortDesc record] else [line])
+          where full = concatMap (insertAllDesc v) l
         -- Right (_, v) -> let full = insertAllDesc v l; putStrLn full
 
 -- return ()
